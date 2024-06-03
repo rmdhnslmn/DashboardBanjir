@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASHBOARD</title>
+    <!-- Dashboard icon link -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Histori icon link -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- CSS link -->
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <h1>Dashboard Prediksi Banjir Jakarta</h1>
+
+    <div class="container">
+        <div class="search-box">
+            <i class='bx bxs-map'></i>
+            <input type="text" placeholder="enter your location">
+            <button class="bx bx-search"></button>
+        </div>
+
+        <p class="city-hide">city hide</p>
+
+        <div class="weather-box">
+            <div class="box">
+                <div class="info-weather">
+                    <div class="weather">
+                        <img src="/img/cloud.png" alt="">
+                        <p class="temperature">0<span>°C</span></p>
+                        <p class="description">Broken Clouds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="weather-details">
+            <div class="humidity">
+                <i class='bx bx-water'></i>
+                <div class="info-humidity">
+                    <span>0%</span>
+                    <p>Humidity</p>
+                </div>
+            </div>
+
+            <div class="wind">
+                <i class='bx bx-wind'></i>
+                <div class="info-wind">
+                    <span>0Km/h</span>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="not-found">
+            <div class="box">
+                <img src="/img/not-found.png">
+                <p>Opps! Location Not Found</p>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div id="map" class="container-2">
+        <label for="area-select">Pilih Daerah:</label>
+        <select id="area-select">
+            <option value="Jakarta Barat">Jakarta Barat</option>
+            <option value="Jakarta Pusat">Jakarta Pusat</option>
+            <option value="Jakarta Selatan">Jakarta Selatan</option>
+            <option value="Jakarta Timur">Jakarta Timur</option>
+            <option value="Jakarta Utara">Jakarta Utara</option>
+        </select>
+    </div>
+    <div id="data" class="container-2">
+        <div class="card">
+            <h2>Data Curah Hujan</h2>
+            <canvas id="rainfall-chart"></canvas>
+            <table id="rainfall-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Curah Hujan (mm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 Juni 2024</td>
+                        <td>120</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card">
+            <h2>Prediksi Banjir</h2>
+            <p id="flood-prediction">Potensi Banjir</p>
+            <table id="flood-prediction-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Prediksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1 Juni 2024</td>
+                        <td>Ya</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="visuals">
+        <div class="precipitation">
+            <h3>precipitation</h3>
+            <div class="box-1">
+                <img src="./visuals/actual_precipitation.png" alt="gambar 1">
+                <img src="./visuals/predicted_precipitation.png" alt="gambar 2">
+                <img src="./visuals/actual_vs_predicted_precipitation.png" alt="gambar 3">
+                <img src="./visuals/precipitation_jakartaPusat.png" alt="gambar 4">
+                <img src="./visuals/precipitation_jakartaTimur.png" alt="gambar 5">
+                <img src="./visuals/precipitation_jakartaUtara.png" alt="gambar 6">
+                <img src="./visuals/precipitation_jakartaSelatan.png" alt="gambar 7">
+            </div>
+        </div>
+        <div class="flood-occurence">
+            <h3>Flood Occurence During rain</h3>
+            <div class="box-2">
+                <img src="./visuals/flood_during_rain.jpg" alt="">
+            </div>
+        </div>
+        <div class="flood">
+            <h3>Flood Distribution</h3>
+            <div class="box-3">
+                <img src="./visuals/flood_distribution_jakut.png" alt="gambar 8">
+                <img src="./visuals/flood_distribution_jaksel.jpg" alt="gambar 9">
+                <img src="./visuals/flood_distribution_jaktim.jpg" alt="gambar 10">
+                <img src="./visuals/flood_distribution_jakpus.jpg" alt="gambar 11">
+                <img src="./visuals/flood_distribution_region_monthly.jpg" alt="gambar 12">
+            </div>
+            <h3>Flood Growth</h3>
+            <div class="box-4">
+                <img src="./visuals/flood_growth.png" alt="">
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.umd.js.map"></script>
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
+    <script src="chart.js"></script>
+
+    <script>
+        import {
+            fetchWeatherApi
+        } from 'openmeteo';
+
+        const params = {
+            "latitude": -6.2146,
+            "longitude": 106.8451,
+            "hourly": ["temperature_2m", "precipitation_probability", "precipitation", "rain"],
+            "timezone": "Asia/Bangkok"
+        };
+        const url = "https://api.open-meteo.com/v1/forecast";
+        const responses = await fetchWeatherApi(url, params);
+
+        // Helper function to form time ranges
+        const range = (start: number, stop: number, step: number) =>
+            Array.from({
+                length: (stop - start) / step
+            }, (_, i) => start + i * step);
+
+        // Process first location. Add a for-loop for multiple locations or weather models
+        const response = responses[0];
+
+        // Attributes for timezone and location
+        const utcOffsetSeconds = response.utcOffsetSeconds();
+        const timezone = response.timezone();
+        const timezoneAbbreviation = response.timezoneAbbreviation();
+        const latitude = response.latitude();
+        const longitude = response.longitude();
+
+        const hourly = response.hourly() !;
+
+        // Note: The order of weather variables in the URL query and the indices below need to match!
+        const weatherData = {
+
+            hourly: {
+                time: range(Number(hourly.time()), Number(hourly.timeEnd()), hourly.interval()).map(
+                    (t) => new Date((t + utcOffsetSeconds) * 1000)
+                ),
+                temperature2m: hourly.variables(0) !.valuesArray() !,
+                precipitationProbability: hourly.variables(1) !.valuesArray() !,
+                precipitation: hourly.variables(2) !.valuesArray() !,
+                rain: hourly.variables(3) !.valuesArray() !,
+            },
+
+        };
+
+        // `weatherData` now contains a simple structure with arrays for datetime and weather data
+        for (let i = 0; i < weatherData.hourly.time.length; i++) {
+            console.log(
+                weatherData.hourly.time[i].toISOString(),
+                weatherData.hourly.temperature2m[i],
+                weatherData.hourly.precipitationProbability[i],
+                weatherData.hourly.precipitation[i],
+                weatherData.hourly.rain[i]
+            );
+        }
+    </script>
+</body>
+
+
+</html>
